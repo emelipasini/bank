@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "outDir": "dist",
+        "rootDir": ".",
+        "module": "Commonjs",
+        "removeComments": true,
+
+        "strict": true,
+        "noImplicitAny": true,
+        
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "esModuleInterop": true,
+
+        "experimentalDecorators": true,
+
+        "forceConsistentCasingInFileNames": true
+    },
+    "include": ["src"]
+}
