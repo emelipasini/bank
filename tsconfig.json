@@ -17,5 +17,5 @@
 
         "forceConsistentCasingInFileNames": true
     },
-    "include": ["src"]
+    "include": ["src", "app.ts"]
 }
