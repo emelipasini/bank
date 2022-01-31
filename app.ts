@@ -3,15 +3,16 @@ import http from "http";
 import config from "config";
 
 import { MongoClient } from "mongodb";
-import { Request, Response } from "express";
 import { UserDB } from "./src/database/user";
+
+import usersRouter from "./src/api/users";
+
+import { validations, registerValidation } from "./src/middlewares/users/register-validation";
 
 export const app = express();
 export const server = http.createServer(app);
 
-app.get("/", (req: Request, res: Response) => {
-    res.send("Hola Mundo!");
-});
+app.use("/api/users", validations, registerValidation, usersRouter);
 
 export const client = new MongoClient(config.get("DB_URI"));
 

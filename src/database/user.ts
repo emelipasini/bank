@@ -25,4 +25,13 @@ export class UserDB {
             return { error: e };
         }
     }
+
+    static async findUser(email: string) {
+        try {
+            return await usersCollection.findOne({ email });
+        } catch (e) {
+            console.error(`Error occurred while finding user, ${e}`);
+            return { error: e };
+        }
+    }
 }
