@@ -1,7 +1,7 @@
 import { Collection, MongoClient } from "mongodb";
 import config from "config";
 
-import { User } from "../models/user";
+import { User } from "../domain/models/user";
 
 let usersCollection: Collection;
 

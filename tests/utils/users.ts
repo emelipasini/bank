@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-import { User } from "../../src/models";
+import { User } from "../../src/domain/models";
 import { randomNumber } from "./functions";
 
 export function createUser() {

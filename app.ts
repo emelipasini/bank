@@ -7,12 +7,10 @@ import { UserDB } from "./src/database/user";
 
 import usersRouter from "./src/api/users";
 
-import { validations, registerValidation } from "./src/middlewares/users/register-validation";
-
 export const app = express();
 export const server = http.createServer(app);
 
-app.use("/api/users", validations, registerValidation, usersRouter);
+app.use("/api/users", usersRouter);
 
 export const client = new MongoClient(config.get("DB_URI"));
 

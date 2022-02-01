@@ -1,5 +1,6 @@
 {
     "PORT": 0,
     "DB_NAME": "",
-    "DB_URI": ""
+    "DB_URI": "",
+    "JWT_SECRET": ""
 }

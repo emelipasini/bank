@@ -5,7 +5,7 @@ import { Collection } from "mongodb";
 import { UserDB } from "../../src/database/user";
 
 import { app, client, server } from "../../app";
-import { User } from "../../src/models/user";
+import { User } from "../../src/domain/models/user";
 import { createBadPassword, createBadUser, createUser } from "../utils/users";
 
 const api = supertest(app);
@@ -32,7 +32,7 @@ describe("Register", () => {
     it("should save the new user", async () => {
         const newUser = createUser();
 
-        const result = await api.post("/api/users/").query(newUser);
+        const result = await api.post("/api/users/register").query(newUser);
         expect(result.statusCode).toBe(201);
         expect(result.body.data.firstname).toBe(newUser.firstname);
 
@@ -41,7 +41,7 @@ describe("Register", () => {
     });
 
     it("should NOT save the user if the email already exists in database", async () => {
-        const result = await api.post("/api/users/").query(oldUser);
+        const result = await api.post("/api/users/register").query(oldUser);
 
         expect(result.statusCode).toBe(400);
         expect(result.body.meta.message).toBe("The email already exists in the database");
@@ -51,15 +51,15 @@ describe("Register", () => {
         const badUser = createUser();
         badUser.password = createBadPassword();
 
-        const result = await api.post("/api/users/").query(badUser);
+        const result = await api.post("/api/users/register").query(badUser);
         expect(result.statusCode).toBe(400);
-        expect(result.body.errors[0].msg).toBe("The password is not secure");
+        expect(result.body.data.errors[0].msg).toBe("The password is not secure");
     });
 
     it("should NOT save the user if a field is empty", async () => {
         const badUser = createBadUser();
 
-        const result = await api.post("/api/users/").query(badUser);
+        const result = await api.post("/api/users/register").query(badUser);
         expect(result.statusCode).toBe(400);
     });
 });
