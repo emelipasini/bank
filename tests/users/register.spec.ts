@@ -34,7 +34,7 @@ describe("Register", () => {
 
         const result = await api.post("/api/users/register").query(newUser);
         expect(result.statusCode).toBe(201);
-        expect(result.body.data.firstname).toBe(newUser.firstname);
+        expect(result.body.data.user.firstname).toBe(newUser.firstname);
 
         const userSaved = usersCollection.findOne({ email: newUser.email });
         expect(userSaved).toBeDefined();
