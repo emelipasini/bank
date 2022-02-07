@@ -12,17 +12,22 @@ export const registerChecks = [
 ];
 
 export async function registerValidation(req: Request, res: Response, next: NextFunction) {
-    const emailExists = await UserDB.findUser(req.query.email as string);
-    if (emailExists) {
-        const response = reply(400, "The email already exists in the database");
-        return res.status(400).json(response);
-    }
+    try {
+        const emailExists = await UserDB.findUser(req.query.email as string);
+        if (emailExists) {
+            const response = reply(400, "The email already exists in the database");
+            return res.status(400).json(response);
+        }
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        const response = reply(400, "Bad Request", { errors: errors.array() });
-        return res.status(400).json(response);
-    }
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const response = reply(400, "Bad Request", { errors: errors.array() });
+            return res.status(400).json(response);
+        }
 
-    next();
+        next();
+    } catch (error) {
+        const response = reply(500, "Unexpected error", { error });
+        return res.status(500).json(response);
+    }
 }

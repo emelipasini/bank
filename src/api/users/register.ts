@@ -11,31 +11,25 @@ export async function register(req: Request, res: Response) {
     try {
         const userInfo = req.query as unknown as User;
 
-        const { newUser, arsAccount, usdAccount } = await saveUserAndCreateAccounts(userInfo);
+        userInfo.password = await bcrypt.hash(userInfo.password, 10);
+        const newUser = new User(userInfo.firstname, userInfo.lastname, userInfo.email, userInfo.password);
+
+        await UserDB.addUser(newUser);
+
+        const arsAccount = new Account(newUser._id!, Currency.ARS);
+        const usdAccount = new Account(newUser._id!, Currency.USD);
+
+        await AccountDB.addAccount(arsAccount);
+        await AccountDB.addAccount(usdAccount);
 
         const data = generateReplyData(newUser, arsAccount.cbu, usdAccount.cbu);
 
         const response = reply(201, "User created succesfully", data);
         return res.status(201).json(response);
     } catch (error) {
-        const response = reply(500, "There was an error while creating user");
+        const response = reply(500, "Unexpected error", { error });
         return res.status(500).json(response);
     }
-}
-
-async function saveUserAndCreateAccounts(userInfo: User) {
-    userInfo.password = await bcrypt.hash(userInfo.password, 10);
-    const newUser = new User(userInfo.firstname, userInfo.lastname, userInfo.email, userInfo.password);
-
-    await UserDB.addUser(newUser);
-
-    const arsAccount = new Account(newUser._id!, Currency.ARS);
-    const usdAccount = new Account(newUser._id!, Currency.USD);
-
-    await AccountDB.addAccount(arsAccount);
-    await AccountDB.addAccount(usdAccount);
-
-    return { newUser, arsAccount, usdAccount };
 }
 
 function generateReplyData(newUser: User, arsCBU: string, usdCBU: string) {

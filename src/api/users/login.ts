@@ -14,7 +14,7 @@ export async function login(req: Request, res: Response) {
         const response = reply(200, "User logged in", { token });
         return res.status(200).json(response);
     } catch (error) {
-        const response = reply(500, "There was an error while loggin user");
+        const response = reply(500, "Unexpected error", { error });
         return res.status(500).json(response);
     }
 }

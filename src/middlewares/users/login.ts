@@ -13,31 +13,36 @@ export const loginChecks = [
 ];
 
 export async function loginValidation(req: Request, res: Response, next: NextFunction) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        const response = reply(400, "Bad Request", { errors: errors.array() });
-        return res.status(400).json(response);
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const response = reply(400, "Bad Request", { errors: errors.array() });
+            return res.status(400).json(response);
+        }
+
+        const { email, password } = req.query as { email: string; password: string };
+
+        const user = (await UserDB.findUser(email)) as unknown as User;
+        if (!user) {
+            const response = reply(400, "Invalid credentials");
+            return res.status(400).json(response);
+        }
+
+        const passwordIsValid = await bcrypt.compare(password, user.password);
+        if (!passwordIsValid) {
+            const response = reply(400, "Invalid credentials");
+            return res.status(400).json(response);
+        }
+
+        req.query.user = {
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+        };
+
+        next();
+    } catch (error) {
+        const response = reply(500, "Unexpected error", { error });
+        return res.status(500).json(response);
     }
-
-    const { email, password } = req.query as { email: string; password: string };
-
-    const user = (await UserDB.findUser(email)) as unknown as User;
-    if (!user) {
-        const response = reply(400, "Invalid credentials");
-        return res.status(400).json(response);
-    }
-
-    const passwordIsValid = await bcrypt.compare(password, user.password);
-    if (!passwordIsValid) {
-        const response = reply(400, "Invalid credentials");
-        return res.status(400).json(response);
-    }
-
-    req.query.user = {
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email,
-    };
-
-    next();
 }
