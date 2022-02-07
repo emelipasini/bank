@@ -4,6 +4,7 @@ import config from "config";
 
 import { MongoClient } from "mongodb";
 import { UserDB } from "./src/database/user";
+import { AccountDB } from "./src/database/account";
 
 import usersRouter from "./src/api/users";
 
@@ -19,6 +20,7 @@ client
     .then(async (client: MongoClient) => {
         console.log("Database connected");
         await UserDB.injectDB(client);
+        await AccountDB.injectDB(client);
 
         server.listen("4200", () => {
             console.log("SERVER RUNNING IN PORT 4200...");

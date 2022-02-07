@@ -35,6 +35,7 @@ export async function loginValidation(req: Request, res: Response, next: NextFun
         }
 
         req.query.user = {
+            _id: user._id as unknown as string,
             firstname: user.firstname,
             lastname: user.lastname,
             email: user.email,

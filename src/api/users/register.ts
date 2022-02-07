@@ -35,6 +35,7 @@ export async function register(req: Request, res: Response) {
 function generateReplyData(newUser: User, arsCBU: string, usdCBU: string) {
     return {
         user: {
+            id: newUser._id,
             firstname: newUser.firstname,
             lastname: newUser.lastname,
             email: newUser.email,

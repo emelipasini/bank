@@ -7,7 +7,7 @@ import { reply } from "../../domain/utils/functions";
 
 export async function login(req: Request, res: Response) {
     try {
-        const user = req.query.user as any;
+        const user = req.query.user as unknown as User;
 
         const token = generateToken(user);
 
@@ -23,6 +23,7 @@ function generateToken(user: User) {
     return jwt.sign(
         {
             exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+            _id: user._id,
             firstname: user.firstname,
             lastname: user.lastname,
             email: user.email,

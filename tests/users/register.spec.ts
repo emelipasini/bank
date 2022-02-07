@@ -29,12 +29,14 @@ describe("Register", () => {
         server.close();
     });
 
-    it("should save the new user", async () => {
+    it("should save the new user and create 2 accounts", async () => {
         const newUser = createUser();
 
         const result = await api.post("/api/users/register").query(newUser);
         expect(result.statusCode).toBe(201);
         expect(result.body.data.user.firstname).toBe(newUser.firstname);
+        expect(result.body.data.accounts[0].cbu).toBeDefined();
+        expect(result.body.data.accounts[1].cbu).toBeDefined();
 
         const userSaved = usersCollection.findOne({ email: newUser.email });
         expect(userSaved).toBeDefined();
