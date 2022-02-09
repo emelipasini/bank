@@ -1,4 +1,6 @@
 import { faker } from "@faker-js/faker";
+import jwt from "jsonwebtoken";
+import config from "config";
 
 import { User } from "../../src/domain/models";
 import { randomNumber } from "./functions";
@@ -33,4 +35,17 @@ export function createBadPassword() {
     const random = randomNumber(6);
 
     return opts[random];
+}
+
+export function generateToken(user: User) {
+    return jwt.sign(
+        {
+            exp: Math.floor(Date.now() / 1000) + 60 * 15,
+            _id: user._id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+        },
+        config.get("JWT_SECRET")
+    );
 }

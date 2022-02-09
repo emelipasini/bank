@@ -7,11 +7,13 @@ import { UserDB } from "./src/database/user";
 import { AccountDB } from "./src/database/account";
 
 import usersRouter from "./src/api/users";
+import accountsRouter from "./src/api/accounts";
 
 export const app = express();
 export const server = http.createServer(app);
 
 app.use("/api/users", usersRouter);
+app.use("/api/accounts", accountsRouter);
 
 export const client = new MongoClient(config.get("DB_URI"));
 
