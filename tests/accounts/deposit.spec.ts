@@ -64,8 +64,8 @@ describe("Deposit money in account", () => {
         expect(result.statusCode).toBe(200);
         expect(result.body.meta.message).toBe("Money successfully deposited");
 
-        const amount = (await AccountDB.findAccount(account.cbu)) as Account;
-        expect(amount.money).toBe(deposit.amount);
+        const updatedAccount = (await AccountDB.findAccount(account.cbu)) as Account;
+        expect(updatedAccount.money).toBe(deposit.amount);
     });
 
     it("should not deposit the money if token is missing", async () => {

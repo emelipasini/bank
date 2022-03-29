@@ -26,6 +26,15 @@ export class UserDB {
         }
     }
 
+    static async addMany(users: User[]) {
+        try {
+            return await usersCollection.insertMany(users);
+        } catch (e) {
+            console.error(`Error occurred while finding account, ${e}`);
+            return { error: e };
+        }
+    }
+
     static async findUser(email: string) {
         try {
             return await usersCollection.findOne({ email });
